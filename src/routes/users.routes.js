@@ -5,9 +5,9 @@ const usersRoutes = Router()
 const usersController = new UsersController()
 
 const myMiddleware = (req, res, next) => {
-	console.log('Middleware')
-	console.log(req.body)
-	next()
+	console.log('Middleware em create user')
+	// console.log(req.body)
+	// next()
 }
 
 // Instância/método. Endereço. Middleware a ser executado. Função do controller.

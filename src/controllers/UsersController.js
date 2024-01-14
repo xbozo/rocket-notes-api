@@ -11,7 +11,7 @@ class UsersController {
 
 		if (!user) throw new AppError('Usuário não encontrado.')
 
-		res.status(200).json({
+		return res.status(200).json({
 			id: user.id,
 			name: user.name,
 			email: user.email,
@@ -34,7 +34,7 @@ class UsersController {
 			hashedPassword,
 		])
 
-		res.status(201).json()
+		return res.status(201).json()
 	}
 
 	async update(request, response) {

@@ -31,7 +31,7 @@ class NotesController {
 			})
 		)
 
-		res.json()
+		return res.json()
 	}
 
 	async showAll(req, res) {
