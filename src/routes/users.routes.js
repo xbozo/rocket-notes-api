@@ -1,18 +1,26 @@
 const { Router } = require('express')
+const multer = require('multer')
+
+const ensureAuthenticated = require('../middlewares/ensureAuthenticated')
 const UsersController = require('../controllers/UsersController')
+const UserAvatarController = require('../controllers/UserAvatarController')
+const uploadConfig = require('../configs/upload')
 
 const usersRoutes = Router()
-const usersController = new UsersController()
+const upload = multer(uploadConfig.MULTER) // configs do multer
 
-const myMiddleware = (req, res, next) => {
-	console.log('Middleware em create user')
-	// console.log(req.body)
-	// next()
-}
+const usersController = new UsersController()
+const userAvatarController = new UserAvatarController()
 
 // Instância/método. Endereço. Middleware a ser executado. Função do controller.
-usersRoutes.post('/', myMiddleware, usersController.create)
-usersRoutes.put('/:id', usersController.update)
+usersRoutes.post('/', usersController.create)
 usersRoutes.get('/:id', usersController.searchUnique)
+usersRoutes.put('/', ensureAuthenticated, usersController.update)
+usersRoutes.patch(
+	'/avatar',
+	ensureAuthenticated,
+	upload.single('avatar'),
+	userAvatarController.update
+)
 
 module.exports = usersRoutes

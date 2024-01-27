@@ -3,7 +3,7 @@ const knex = require('../database/knex')
 class NotesController {
 	async create(req, res) {
 		const { title, description, tags, links } = req.body
-		const { user_id } = req.params
+		const user_id = req.user.id
 
 		// retorna um array com o id na 1 posição. transfere isso pra variável note_id com a desestruturação
 		const [note_id] = await knex('notes').insert({
@@ -35,7 +35,8 @@ class NotesController {
 	}
 
 	async showAll(req, res) {
-		const { user_id, title, tags } = req.query
+		const { title, tags } = req.query
+		const user_id = req.user.id
 
 		let notes
 
@@ -48,6 +49,7 @@ class NotesController {
 				.whereLike('notes.title', `%${title}%`)
 				.whereIn('name', filterTags)
 				.innerJoin('notes', 'notes.id', 'tags.note_id') // tabela a conectar, chaves de relação
+				.groupBy('notes.id')
 				.orderBy('notes.title')
 		} else {
 			notes = await knex('notes')
